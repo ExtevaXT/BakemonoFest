@@ -12,6 +12,7 @@ namespace BakemonoFest.Controllers
         public DbSet<Nomination> Nominations { get; set; }
         public DbSet<Monster> Monsters { get; set; }
         public DbSet<MonsterType> MonsterTypes { get; set; }
+        public DbSet<Rate> Rates { get; set; }
 
         public MobileContext(DbContextOptions<MobileContext> options)
             : base(options)

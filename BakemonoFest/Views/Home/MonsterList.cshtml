@@ -8,8 +8,8 @@
 @using (Html.BeginForm())
 {
     <label>Номинация:</label>
-    <select asp-items="ViewBag.SelectNominations"></select>
-    <input type="submit" value="Сортировка" />
+    <select asp-items="ViewBag.SelectNominations" name="filter"></select>
+    <input type="submit" value="Фильтрация" />
 }
 <table class="table">
     <tr>
@@ -17,7 +17,7 @@
         <th>Кличка</th>
         <th>Владелец</th>
         <th>Номинация</th>
-        <th>Тип монстра</th>
+        <th>Порода</th>
         <th>День рождения</th>
         <th>Место жительства</th>
         <th>Рейтинг</th>

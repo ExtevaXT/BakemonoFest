@@ -61,14 +61,28 @@ namespace BakemonoFest.Controllers
             return View();
         }
 
-        public IActionResult MonsterList()
+        public IActionResult MonsterList(int filter = 0)
         {
-            ViewBag.monsterList = mobileContext.Monsters.ToList();
+            List<Monster> monsters = mobileContext.Monsters.ToList();
+            if (filter != 0) ViewBag.monsterList = monsters.Where(x => x.NominationId == filter);
+            else ViewBag.monsterList = monsters;
             ViewBag.users = mobileContext.Users.ToList();
             List<Nomination> nominations = mobileContext.Nominations.ToList();
+            nominations.Insert(0,new Nomination() { Id = 0, Name = "Все" });
             ViewBag.monsterTypes = mobileContext.MonsterTypes.ToList();
-            SelectList test = new SelectList(nominations, "Id","Name");
-            ViewBag.SelectNominations = test;
+            var rates = mobileContext.Rates.ToList();
+            foreach (var m in monsters)
+            {
+                List<Rate> monsterRates = rates.Where(x => x.MonsterId == m.Id) as List<Rate>;
+                foreach (var r in monsterRates)
+                {
+                    m.Rating += r.Value;
+                }
+                
+            }
+            
+            
+            ViewBag.SelectNominations = new SelectList(nominations, "Id", "Name");
 
             return View();
         }
