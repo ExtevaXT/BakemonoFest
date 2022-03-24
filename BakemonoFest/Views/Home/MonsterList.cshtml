@@ -5,7 +5,12 @@
 }
 
 
-
+@using (Html.BeginForm())
+{
+    <label>Номинация:</label>
+    <select asp-items="ViewBag.SelectNominations"></select>
+    <input type="submit" value="Сортировка" />
+}
 <table class="table">
     <tr>
         <th>Фото</th>
@@ -20,7 +25,7 @@
     @foreach (var c in ViewBag.monsterList)
     {
         <tr>
-            <td><img src="@c.Photo" alt="Alternate Text" width="64" height="64"/></td>
+            <td><img src="@c.Photo" alt="Alternate Text" width="64" height="64" /></td>
             <td>@c.Name</td>
             <td>@c.User.Name</td>
             <td>@c.Nomination.Name</td>

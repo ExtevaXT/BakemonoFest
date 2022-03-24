@@ -1,5 +1,6 @@
 ﻿using BakemonoFest.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -64,8 +65,11 @@ namespace BakemonoFest.Controllers
         {
             ViewBag.monsterList = mobileContext.Monsters.ToList();
             ViewBag.users = mobileContext.Users.ToList();
-            ViewBag.nominations = mobileContext.Nominations.ToList();
+            List<Nomination> nominations = mobileContext.Nominations.ToList();
             ViewBag.monsterTypes = mobileContext.MonsterTypes.ToList();
+            SelectList test = new SelectList(nominations, "Id","Name");
+            ViewBag.SelectNominations = test;
+
             return View();
         }
 
