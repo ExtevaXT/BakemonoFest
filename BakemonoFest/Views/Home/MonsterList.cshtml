@@ -1,0 +1,33 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+
+<table class="table">
+    <tr>
+        <th>Фото</th>
+        <th>Кличка</th>
+        <th>Владелец</th>
+        <th>Номинация</th>
+        <th>Тип монстра</th>
+        <th>День рождения</th>
+        <th>Место жительства</th>
+        <th>Рейтинг</th>
+    </tr>
+    @foreach (var c in ViewBag.monsterList)
+    {
+        <tr>
+            <td><img src="@c.Photo" alt="Alternate Text" width="64" height="64"/></td>
+            <td>@c.Name</td>
+            <td>@c.User.Name</td>
+            <td>@c.Nomination.Name</td>
+            <td>@c.MonsterType.Name</td>
+            <td>@c.Birthday.ToString("d")</td>
+            <td>@c.Job</td>
+            <td>@c.Rating</td>
+        </tr>
+    }
+</table>
