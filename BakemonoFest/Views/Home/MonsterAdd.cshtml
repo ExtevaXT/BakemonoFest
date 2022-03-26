@@ -3,3 +3,23 @@
 *@
 @{
 }
+@{
+}
+@using (Html.BeginForm("MonsterAdd", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <p> <input class="form-control" type="text" name="master" placeholder="Ваше имя" required/></p>
+    <p> <input class="form-control" type="text" name="name" placeholder="Кличка монстра" required/></p>
+    <p> <input class="form-control" type="text" name="job" placeholder="Место жительства" required/></p>
+    <p> <select class="form-control" asp-items="ViewBag.SelectNominations" name="nomination" required><option value="" disabled selected>Выберете номинацию</option></select></p>
+    <p> <select class="form-control" asp-items="ViewBag.SelectMonsterTypes" name="monsterType" required><option value="" disabled selected>Выберете породу монстра</option></select></p>
+    <p>
+        <label>День рождения</label>
+        <input type="date" class="form-control" name="birthday" required>
+    </p>
+    <p>
+        <label>Фото монстра</label>
+        <input class="form-control" type="file" name="photo" required>
+    </p>
+
+    <input class="form-control btn btn-primary" type="submit" value="Зарегестрировать монстра" />
+}

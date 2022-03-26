@@ -1,21 +1,16 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-@if (ViewBag.user.Name != null)
-{
-    <div class="d-flex justify-content-between">
-        <p>Добро пожаловать <span class="font-weight-bold">@ViewBag.user.Name</span></p>
-        <a asp-controller="Home" asp-action="MonsterAdd">Добавить монстра</a>
-    </div>
-}
 
-<div class="text-center">
-    <h1 class="display-4">Добро пожаловать на конкурс монстров</h1>
-    <p>Вы можете посмотреть участников нашего конкурса в меню навигации</p>
-    <p>Если вы хотите зарегестрировать вашего монстра</p>
-    <p>то сперва вам нужно зарегестрироваться на нашем сайте</p>
-    <a asp-action="MonsterList" asp-controller="Home"><button class="btn btn-primary">Посмотреть монстров</button></a>
-    <a asp-action="Register" asp-controller="Home"><button class="btn btn-primary">Зарегестрироваться</button></a>
+
+<div class="text-center d-flex justify-content-center">
+    <div class="bg-primary p-5 w-100 mt-3">
+        <h1 class="display-4 text-light mt-5">Добро пожаловать</h1>
+        <h4 class="text-light">на конкурс монстров</h4>
+        <p class="text-light">Вы можете оценить участников нашего конкурса</p>
+        <a asp-action="MonsterList" asp-controller="Home"><button class="btn btn-light mt-5 mb-5 text-primary">Посмотреть монстров</button></a>
+    </div>
+    
 
 </div>
 

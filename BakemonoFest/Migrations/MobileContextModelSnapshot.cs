@@ -32,6 +32,9 @@ namespace BakemonoFest.Migrations
                     b.Property<string>("Job")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Master")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("MonsterTypeId")
                         .HasColumnType("int");
 
@@ -47,16 +50,11 @@ namespace BakemonoFest.Migrations
                     b.Property<double>("Rating")
                         .HasColumnType("float");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("MonsterTypeId");
 
                     b.HasIndex("NominationId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Monsters");
                 });
@@ -101,9 +99,6 @@ namespace BakemonoFest.Migrations
                     b.Property<int>("MonsterId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Value")
                         .HasColumnType("int");
 
@@ -111,30 +106,7 @@ namespace BakemonoFest.Migrations
 
                     b.HasIndex("MonsterId");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Rates");
-                });
-
-            modelBuilder.Entity("BakemonoFest.Controllers.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Login")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("BakemonoFest.Controllers.Monster", b =>
@@ -150,12 +122,6 @@ namespace BakemonoFest.Migrations
                         .HasForeignKey("NominationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("BakemonoFest.Controllers.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("BakemonoFest.Controllers.Rate", b =>
@@ -163,12 +129,6 @@ namespace BakemonoFest.Migrations
                     b.HasOne("BakemonoFest.Controllers.Monster", "Monster")
                         .WithMany()
                         .HasForeignKey("MonsterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BakemonoFest.Controllers.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -7,9 +7,11 @@
 
 @using (Html.BeginForm())
 {
-    <label>Номинация:</label>
-    <select asp-items="ViewBag.SelectNominations" name="filter"></select>
-    <input type="submit" value="Фильтрация" />
+<div>
+    <select class="form-control" asp-items="ViewBag.SelectNominations" name="filter"></select>
+    <input class="form-control btn-outline-primary mt-3" type="submit" value="Фильтрация" />
+</div>
+    
 }
 <table class="table">
     <tr>
@@ -21,18 +23,26 @@
         <th>День рождения</th>
         <th>Место жительства</th>
         <th>Рейтинг</th>
+        <th>Оценить</th>
     </tr>
     @foreach (var c in ViewBag.monsterList)
     {
         <tr>
             <td><img src="@c.Photo" alt="Alternate Text" width="64" height="64" /></td>
             <td>@c.Name</td>
-            <td>@c.User.Name</td>
+            <td>@c.Master</td>
             <td>@c.Nomination.Name</td>
             <td>@c.MonsterType.Name</td>
             <td>@c.Birthday.ToString("d")</td>
             <td>@c.Job</td>
             <td>@c.Rating</td>
+            <td>
+                <a href="/Home/MonsterList?monster=@c.Id&rate=1">1</a>
+                <a href="/Home/MonsterList?monster=@c.Id&rate=2">2</a>
+                <a href="/Home/MonsterList?monster=@c.Id&rate=3">3</a>
+                <a href="/Home/MonsterList?monster=@c.Id&rate=4">4</a>
+                <a href="/Home/MonsterList?monster=@c.Id&rate=5">5</a>
+            </td>
         </tr>
     }
 </table>

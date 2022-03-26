@@ -1,10 +1,13 @@
 ﻿using BakemonoFest.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,73 +15,91 @@ namespace BakemonoFest.Controllers
 {
     public class HomeController : Controller
     {
-        
+        IWebHostEnvironment _appEnvironment;
         MobileContext mobileContext;
-        public HomeController(MobileContext mobileContext)
+        public HomeController(MobileContext mobileContext, IWebHostEnvironment _appEnvironment)
         {
-            this.mobileContext = mobileContext;  
+            this.mobileContext = mobileContext;
+            this._appEnvironment = _appEnvironment;
+
         }
 
-        public IActionResult Index(User user = null)
+        public IActionResult Index()
         {
-            ViewBag.user = user;
             return View();
 
         }
+
         [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
-        [HttpPost]
-        public IActionResult Register(string login, string password, string name)
-        {
-            User reg = new User() { Login = login, Password = password, Name=name };
-            mobileContext.Users.Add(reg);
-            mobileContext.SaveChanges();
-            return RedirectToAction("Login");
-
-        }
-        [HttpGet]
-        public IActionResult Login()
-        {
-            return View();
-
-        }
-        [HttpPost]
-        public IActionResult Login(string login, string password)
-        {
-            User user = mobileContext.Users.ToList().Where(x => x.Login == login && x.Password == password).FirstOrDefault();
-            if (user == null) return View();
-            else return RedirectToAction("Index", user);
-
-
-        }
-
-
         public IActionResult MonsterAdd()
         {
+            List<Nomination> nominations = mobileContext.Nominations.ToList();
+            List<MonsterType> monsterTypes = mobileContext.MonsterTypes.ToList();
+            ViewBag.SelectNominations = new SelectList(nominations, "Id", "Name");
+            ViewBag.SelectMonsterTypes = new SelectList(monsterTypes, "Id", "Name");
             return View();
         }
-
-        public IActionResult MonsterList(int filter = 0)
+        [HttpPost]
+        public IActionResult MonsterAdd(string name, string master, DateTime birthday, IFormFile photo, string job, int nomination, int monsterType)
         {
+            if (photo != null)
+
+            {
+                // путь к папке Files
+                string path = "/img/" + photo.FileName;
+                // сохраняем файл в папку Images в каталоге wwwroot
+                using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+                {
+                    photo.CopyTo(fileStream); //копируем файл в папку
+                }
+                Monster added = new Monster();
+                added.Master = master;
+                added.Job = job;
+                added.Name = name;
+                added.NominationId = nomination;
+                added.MonsterTypeId = monsterType;
+                added.Photo = path;
+                added.Birthday = birthday;
+                mobileContext.Monsters.Add(added);
+                mobileContext.SaveChanges();
+                
+            }
+            return RedirectToAction("Index");
+
+        }
+
+        public IActionResult MonsterList(int filter = 0, int rate=0, int monster = 0 )
+        {
+            if(rate!=0 && monster != 0)
+            {
+                Rate rateAdd = new Rate();
+                rateAdd.MonsterId = monster;
+                rateAdd.Value = rate;
+                mobileContext.Rates.Add(rateAdd);
+            }
+            
+            mobileContext.SaveChanges();
             List<Monster> monsters = mobileContext.Monsters.ToList();
             if (filter != 0) ViewBag.monsterList = monsters.Where(x => x.NominationId == filter);
             else ViewBag.monsterList = monsters;
-            ViewBag.users = mobileContext.Users.ToList();
             List<Nomination> nominations = mobileContext.Nominations.ToList();
             nominations.Insert(0,new Nomination() { Id = 0, Name = "Все" });
             ViewBag.monsterTypes = mobileContext.MonsterTypes.ToList();
             var rates = mobileContext.Rates.ToList();
+            
             foreach (var m in monsters)
             {
-                List<Rate> monsterRates = rates.Where(x => x.MonsterId == m.Id) as List<Rate>;
+                List<Rate> monsterRates = rates.Where(x => x.MonsterId == m.Id).ToList();
+                double rFull = 0;
+                int rCount = 0;
                 foreach (var r in monsterRates)
                 {
-                    m.Rating += r.Value;
+                    rFull += r.Value;
+                    rCount++;
                 }
-                
+                if (rCount != 0)
+                    m.Rating = Math.Round(rFull / rCount, 2);
+
             }
             
             

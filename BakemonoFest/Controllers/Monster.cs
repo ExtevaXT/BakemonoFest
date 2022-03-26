@@ -9,8 +9,7 @@ namespace BakemonoFest.Controllers
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public string Master { get; set; }
         public int NominationId { get; set; }
         public Nomination Nomination { get; set; }
         public int MonsterTypeId { get; set; }
